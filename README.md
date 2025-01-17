@@ -8,12 +8,12 @@ This is a repository of Linux commands and R script used for the differential ex
 - Campy_DEA.R -- differential expression analysis R script
 
 ## Bioinformatic software and packages used
-- fastqc
-- multiqc
-- centrifuge
-- gffread
-- STAR
-- samtools
-- pavian
-- edgeR
-- limma
+- [FastQC](https://github.com/s-andrews/FastQC)
+- [MultiQC](https://github.com/MultiQC/MultiQC)
+- [Centrifuge](https://github.com/DaehwanKimLab/centrifuge)
+- [GFFRead](https://github.com/gpertea/gffread)
+- [STAR](https://github.com/alexdobin/STAR)
+- [samtools](https://github.com/samtools/samtools)
+- [Pavian](https://github.com/fbreitwieser/pavian)
+- [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html)
+- [limma](https://bioconductor.org/packages/release/bioc/html/limma.html)

@@ -18,3 +18,8 @@ Run following scripts in consecutive order:
 - [Pavian](https://github.com/fbreitwieser/pavian)
 - [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html)
 - [limma](https://bioconductor.org/packages/release/bioc/html/limma.html)
+
+## R package versions
+stringr_1.4.0
+edgeR_3.36.0
+limma_3.50.3 

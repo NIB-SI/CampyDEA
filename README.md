@@ -20,6 +20,8 @@ Run following scripts in consecutive order:
 - [limma](https://bioconductor.org/packages/release/bioc/html/limma.html)
 
 ## R package versions
-stringr_1.4.0
-edgeR_3.36.0
-limma_3.50.3 
+R version 4.1.1 (2021-08-10)
+
+- stringr_1.4.0
+- edgeR_3.36.0
+- limma_3.50.3 

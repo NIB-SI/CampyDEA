@@ -8,6 +8,8 @@ Run following scripts in consecutive order:
 - Campy_STAR_commands.txt -- reference index build and RNA-seq read mapping
 - Campy_DEA.R -- differential expression analysis R script
 
+We used [pISA-tree](https://github.com/NIB-SI/pISA-tree) research data management system to organise scripts, results and metadata.
+
 ## Bioinformatic software and packages used
 - [FastQC](https://github.com/s-andrews/FastQC)
 - [MultiQC](https://github.com/MultiQC/MultiQC)

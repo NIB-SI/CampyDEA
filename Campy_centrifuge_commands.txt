@@ -1,0 +1,35 @@
+# Taxonomic classification of RNA-Seq reads of Campylobacter samples
+# data from Manca Volk <Manca.Volk@bf.uni-lj.si>
+# running @ heron
+
+conda create -n rnaseq -c bioconda centrifuge=1.0.4_beta fastqc multiqc star=2.7.10b gffread=0.12.7 pigz samtools=1.9
+
+cd ./pISA-Projects/_p_ExtDataAnalysis/_I_CampyBF/_S_CampyTS/_A_01_centrifuge/scripts
+
+pigz -d ../input/*.gz
+
+conda activate rnaseq
+
+mkdir ../output/fastqc
+fastqc -t 120 -o ../output/fastqc ../input/*.fq
+
+
+mkdir ../output/centrifuge
+
+for f in `ls -1 ../input/*_1.fq | sed 's/_1.fq//' | grep -o '........$' `
+do
+  centrifuge -x /swalt/bioDBs/centrifuge/dbs_v2018/nt -1 ../input/${f}_1.fq -2 ../input/${f}_2.fq -S ../output/centrifuge/output_centrifuge_${f}.txt --report-file ../output/centrifuge/output_report_${f}.txt --seed 42 -p 64
+done
+
+for f in `ls -1 ../input/*_1.fq | sed 's/_1.fq//' | grep -o '........$' `
+do
+  centrifuge-kreport -x /swalt/bioDBs/centrifuge/dbs_v2018/nt ../output/centrifuge/output_centrifuge_${f}.txt > ../output/centrifuge/kreport_${f}.txt
+done
+
+conda deactivate
+
+#run pavian in R / RStudio:
+## Installs required packages from CRAN and Bioconductor
+source("https://raw.githubusercontent.com/fbreitwieser/pavian/master/inst/shinyapp/install-pavian.R")
+
+pavian::runApp(port=5000)

@@ -1,0 +1,70 @@
+# Mapping Campylobacter RNA-Seq reads to genome
+# data from Manca Volk <Manca.Volk@bf.uni-lj.si>
+# running @ heron
+
+conda activate rnaseq
+
+#ulimit default 1024
+ulimit -n 10000
+
+
+#gff and gtf from ncbi Genome not working (only few genes get into the STAR index) 
+#converted gtf also not working
+#gffread -F --keep-genes --gene2exon -T -v -o ../input/GCF_000009085.1_ASM908v1_genomic.gffread.gtf ../input/GCF_000009085.1_ASM908v1_genomic.gff > ../input/gffread.convert.log 2>&1
+#gffread -T -v -o ../input/GCF_000009085.1_ASM908v1_genomic.gffread.gtf ../input/GCF_000009085.1_ASM908v1_genomic.gff > ../input/gffread.convert.log 2>&1
+
+# download ensembl genome and gff 
+
+cd ./pISA-Projects/_p_ExtDataAnalysis/_I_CampyBF/_S_CampyTS/_A_02_STAR/input
+
+wget http://ftp.ensemblgenomes.org/pub/bacteria/release-54/fasta/bacteria_0_collection/campylobacter_jejuni_subsp_jejuni_nctc_11168_atcc_700819_gca_000009085/dna/Campylobacter_jejuni_subsp_jejuni_nctc_11168_atcc_700819_gca_000009085.ASM908v1.dna.toplevel.fa.gz
+pigz -d Campylobacter_jejuni_subsp_jejuni_nctc_11168_atcc_700819_gca_000009085.ASM908v1.dna.toplevel.fa.gz
+
+wget http://ftp.ensemblgenomes.org/pub/bacteria/release-54/gff3/bacteria_0_collection/campylobacter_jejuni_subsp_jejuni_nctc_11168_atcc_700819_gca_000009085/Campylobacter_jejuni_subsp_jejuni_nctc_11168_atcc_700819_gca_000009085.ASM908v1.49.gff3.gz
+pigz -d Campylobacter_jejuni_subsp_jejuni_nctc_11168_atcc_700819_gca_000009085.ASM908v1.49.gff3.gz
+
+cd ../_A_02_STAR/scripts
+
+gffread -T -v -o ../input/Campylobacter_jejuni_subsp_jejuni_nctc_11168_atcc_700819_gca_000009085.ASM908v1.49.gffread.gtf ../input/Campylobacter_jejuni_subsp_jejuni_nctc_11168_atcc_700819_gca_000009085.ASM908v1.49.gff3 > ../input/gffread.convert.log 2>&1
+#converted to gtf because gff did not work
+
+# create genome index
+STAR \
+--runThreadN 64 \
+--runMode genomeGenerate \
+--genomeDir ../output/STAR_index \
+--genomeFastaFiles ../input/Campylobacter_jejuni_subsp_jejuni_nctc_11168_atcc_700819_gca_000009085.ASM908v1.dna.toplevel.fa \
+--sjdbGTFfile ../input/Campylobacter_jejuni_subsp_jejuni_nctc_11168_atcc_700819_gca_000009085.ASM908v1.49.gffread.gtf \
+--genomeSAindexNbases 9
+
+# map reads
+STAR --genomeLoad LoadAndExit --genomeDir ../output/STAR_index
+
+for i in $(ls ../../_A_01_centrifuge/input | sed s/_[12].fq// | sort -u)
+do  STAR \
+        --genomeLoad LoadAndExit \
+	--genomeDir ../output/STAR_index \
+	--runThreadN 120 \
+	--quantMode GeneCounts \
+	--readFilesIn  ../../_A_01_centrifuge/input/${i}_1.fq ../../_A_01_centrifuge/input/${i}_2.fq \
+	--outFileNamePrefix ../output/$i. \
+	--outFilterMultimapNmax 1 \
+	--outSAMtype BAM SortedByCoordinate \
+	--limitBAMsortRAM 30000000000
+done
+
+STAR --genomeLoad Remove --genomeDir ../output/STAR_index
+
+rm *.out*
+
+cd ../output
+ls *.bam | parallel samtools index '{}'
+
+# multiqc report
+mkdir ../output/multiqc
+
+multiqc -v -o ../output/multiqc  ../../_A_01_centrifuge/output/fastqc ../output 
+
+conda deactivate
+
+# further analysis in R 

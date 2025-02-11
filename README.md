@@ -1,6 +1,6 @@
 # _Campylobacter jejuni_ biofilm differential expression analysis (DEA)
 
-This is a repository of Linux commands and R script used for the differential expression analysis of the _C. jenuni_ dataset produced by Manca Volk (ORCID) at Biotechnical Faculty, University of Ljubljana (UNI-LJ BF). Dr Marko Petek, NIB ([ORCID](https://orcid.org/0000-0003-3644-7827)) and Manca Volk performed the bioinformatic analysis together. The project was supervised by Dr Špela Baebler, NIB ([ORCID](https://orcid.org/0000-0003-4776-7164)) and Anja Klančnik, UNI-LJ BF ([ORCID](https://orcid.org/0000-0003-1632-5785)).
+This is a repository of Linux commands and R script used for the differential expression analysis of the _C. jenuni_ dataset produced by Manca Volk (ORCID) at Biotechnical Faculty, University of Ljubljana (UNI-LJ BF). Dr Marko Petek, NIB ([ORCID](https://orcid.org/0000-0003-3644-7827)) and Manca Volk performed the bioinformatic analysis together. The project was supervised by Dr Špela Baebler, NIB ([ORCID](https://orcid.org/0000-0003-4776-7164)) and Dr Anja Klančnik, UNI-LJ BF ([ORCID](https://orcid.org/0000-0003-1632-5785)).
 
 ## Content description
 Run following scripts in consecutive order:
